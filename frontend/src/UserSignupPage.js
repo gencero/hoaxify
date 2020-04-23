@@ -29,14 +29,11 @@ class UserSignupPage extends React.Component{
         const {username, displayName, password} = this.state;
 
         const body = {
-            //username : username,
-            //displayName : displayName,
-            //password : password
             username,
             displayName,
             password
         }
-        axios.post('http://localhost:8080/api/1.0/users', body);
+        axios.post('/api/1.0/users', body);
 
     }
 
