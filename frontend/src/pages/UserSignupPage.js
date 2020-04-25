@@ -8,10 +8,17 @@ class UserSignupPage extends React.Component {
     password: null,
     passwordRepeat: null,
     pendingApiCall: false,
+    errors: {}
   };
 
   onChange = (event) => {
     const { name, value } = event.target;
+    const errors = {...this.state.errors};//object'nin kopyası olusturuldu
+    errors[name] = undefined
+    this.setState({
+      [name]: value,
+      errors
+    })
 
     //const value = event.target.value
     //const name = event.target.name
@@ -35,7 +42,11 @@ class UserSignupPage extends React.Component {
     
     try {
        const response = await signup(body);
-    } catch (error) {}
+    } catch (error) {
+      if (error.response.data.validationErrors){
+        this.setState({ errors: error.response.data.validationErrors});  
+      }
+    }
 
     this.setState({ pendingApiCall: false });
 
@@ -47,14 +58,17 @@ class UserSignupPage extends React.Component {
   };
 
   render() {
-    const {pendingApiCall } = this.state;
+    const {pendingApiCall, errors} = this.state;
+    const {username } = errors;
+
     return (
       <div className="container">
         <form>
           <h1 className="text-center">Sign Up</h1>
           <div className="form-group">
             <label>Username</label>
-            <input name="username" className="form-control" onChange={this.onChange} ></input>
+            <input name="username" className={username ? "form-control is-invalid" : "form-control"} onChange={this.onChange} ></input>
+            <div className="invalid-feedback">{username}</div>  
           </div>
           <div className="form-group">
             <label>Display Name</label>
