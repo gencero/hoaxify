@@ -29,14 +29,26 @@ public class UserController {
 	public ResponseEntity<?> createUser(@RequestBody User user) {
 		//log.info("user: " + user.toString());
 		
+		ApiError error = new ApiError(400, "Validation error", "/api/1.0/users");
+		Map<String, String> validationErrors = new HashMap<>();
+		
 		String username = user.getUsername();
-		if (username == null || username.isEmpty()) {
-			ApiError error = new ApiError(400, "Validation error", "/api/1.0/users");
-			Map<String, String> validationErrors = new HashMap<>();
+		String displayName = user.getDisplayName();
+		
+		if (username == null || username.isEmpty()) {			
 			validationErrors.put("username", "Username cannot be null");
+		}
+		
+		
+		if (displayName == null || displayName.isEmpty()) {
+			validationErrors.put("displayName", "Displayname cannot be null");
+		}
+		
+		if(validationErrors.size() > 0 ) {
 			error.setValidationErrors(validationErrors);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 		}
+		
 		userService.save(user);
 		return ResponseEntity.ok(new GenericResponse("User created"));
 	}
