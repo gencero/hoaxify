@@ -7,11 +7,15 @@ import UserSignupPage from './pages/UserSignupPage';
 import LoginPage from './pages/LoginPage';
 import * as serviceWorker from './serviceWorker';
 import './i18n';
+import LanguageSelector from './components/LanguageSelector';
 
 ReactDOM.render(
+  <div>
   <React.StrictMode>
     <LoginPage />
-  </React.StrictMode>,
+    <LanguageSelector />
+  </React.StrictMode>
+  </div>,
   document.getElementById('root')
 );
 
